@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 typedef struct {
-	int bookNum;
+	int bookNum = 0;
 	char title[30];
 	char author[25];
 	double price;
@@ -45,6 +45,8 @@ void main() {
 
 	list = (bookT*)malloc(numOfBooks * sizeof(bookT));
 
+	
+	//calling functions
 	addBook(list, numOfBooks);
 
 	displayBook(list, numOfBooks);
