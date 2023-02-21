@@ -10,6 +10,7 @@ typedef struct {
 void addBook(bookT* bookDetails, int size);
 void displayBook(bookT* bookDetails, int size);
 void searchBook(bookT* bookDetails, int size);
+void editBook(bookT* bookDetails, int size);
 
 void main() {
 	int numOfBooks = 0;
@@ -49,9 +50,12 @@ void main() {
 	displayBook(list, numOfBooks);
 
 	searchBook(list, numOfBooks);
+
+	editBook(list, numOfBooks);
 }
 
 void addBook(bookT* bookDetails, int size) {
+
 	for (int i = 0; i < size; i++) {
 
 	}
@@ -62,5 +66,9 @@ void displayBook(bookT* bookDetails, int size) {
 }
 
 void searchBook(bookT* bookDetails, int size) {
+
+}
+
+void editBook(bookT* bookDetials, int size) {
 
 }
