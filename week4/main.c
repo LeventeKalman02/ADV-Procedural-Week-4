@@ -26,13 +26,13 @@ void main() {
 		scanf("%d", &menuOpt);
 
 		if (menuOpt == 1) {
-
+			searchBook(list, numOfBooks);
 		}
 		else if (menuOpt == 2) {
-
+			addBook(list, numOfBooks);
 		}
 		else if (menuOpt == 3) {
-
+			editBook(list, numOfBooks);
 		}
 		else if (menuOpt == -1) {
 			exit;
@@ -47,13 +47,8 @@ void main() {
 
 	
 	//calling functions
-	addBook(list, numOfBooks);
-
 	displayBook(list, numOfBooks);
 
-	searchBook(list, numOfBooks);
-
-	editBook(list, numOfBooks);
 }
 
 void addBook(bookT* bookDetails, int size) {
