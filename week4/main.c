@@ -11,18 +11,18 @@ typedef struct {
 
 void mainMenu(bookT* bookDetails, int size);
 void addBook(bookT* bookDetails, int size);
-void displayBook(bookT* bookDetails, int size);
 void searchBook(bookT* bookDetails, int size);
 void editBook(bookT* bookDetails, int size);
 
 void main() {
-	int numOfBooks;
 	bookT* library;
+	int numOfBooks;
 	int init;
 
-	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
+	printf("Please enter the number of books you would like to have:\n");
+	scanf("%d", &numOfBooks);
 
-	mainMenu(library, numOfBooks);	
+	library = (bookT*)malloc(numOfBooks * sizeof(bookT));	
 
 	//initialising the library
 	for (int i = 0; i < numOfBooks; i++) {
@@ -32,18 +32,16 @@ void main() {
 		(library + i)->price = 0;
 	}	
 
-	
-	//calling functions
-	displayBook(library, numOfBooks);
-
+	mainMenu(library, numOfBooks);
 }
 
 void mainMenu(bookT* bookDetails, int size) {
-	int menuOpt;
+
+	int menuOpt = 0;
 
 	//menu loop 
-	while (menuOpt = !- 1) {
-		printf("Please enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
+	while (menuOpt != -1) {
+		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
 		scanf("%d", &menuOpt);
 
 		if (menuOpt == 1) {
@@ -60,7 +58,8 @@ void mainMenu(bookT* bookDetails, int size) {
 			menuOpt = 0;
 		}
 
-		printf("Please enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
+		/*printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
+		scanf("%d", &menuOpt);*/
 	}
 }
 
@@ -68,16 +67,16 @@ void addBook(bookT* bookDetails, int size) {
 	int addBook = 0;
 	for (int i = 0; i < size; i++) {
 		if ((bookDetails + i)->bookNum == 0) {
-			printf("Please enter the book number\n");
+			printf("Please enter the book number:\n");
 			scanf("%ld", &(bookDetails + i)->bookNum);
 
-			printf("Please enter the book name\n");
+			printf("Please enter the book name:\n");
 			scanf("%s", (bookDetails + i)->title);
 
-			printf("Please enter the book author\n");
+			printf("Please enter the book author:\n");
 			scanf("%s", (bookDetails + i)->author);
 
-			printf("Please enter the price\n");
+			printf("Please enter the price:\n");
 			scanf("%lf", &(bookDetails + i)->price);
 			addBook = 1;
 			break;
@@ -90,14 +89,55 @@ void addBook(bookT* bookDetails, int size) {
 	}
 }
 
-void displayBook(bookT* bookDetails, int size) {
-
-}
-
 void searchBook(bookT* bookDetails, int size) {
+	long findBooknum;
+	int foundBook = 0;
 
+	printf("Please enter the book number of the book that you want to find:\n");
+	scanf("%ld", &findBooknum);
+
+	for (int i = 0; i < size; i++)
+	{
+		if ((bookDetails + i)->bookNum == findBooknum) {
+			printf("Book title: %s\n", (bookDetails + i)->title);
+			printf("Book author: %s\n", (bookDetails + i)->author);
+			printf("Book price: %.2f\n", (bookDetails + i)->price);
+
+			foundBook = 1;
+			break;
+		}
+	}
+
+	if (foundBook == 0) {
+		printf("The book number %ld could not be found!\n", findBooknum);
+	}
 }
 
-void editBook(bookT* bookDetials, int size) {
+void editBook(bookT* bookDetails, int size) {
+	long findBook;
+	int found = 0;
 
+	printf("\nPlease enter the book number of the book that you want to edit:\n");
+	scanf("%ld", &findBook);
+
+	for (int i = 0; i < size; i++)
+	{
+		if ((bookDetails + i)-> bookNum == findBook) {
+			printf("Please enter the new book number you want for the book\n");
+			scanf("%d", &(bookDetails + i)->bookNum);
+			printf("Please enter the new title you want for the book\n");
+			scanf("%s", &(bookDetails + i)->title);
+			printf("Please enter the new author you want for the book\n");
+			scanf("%s", &(bookDetails + i)->author);
+			printf("Please enter the new price you want for the book\n");
+			scanf("%lf",&(bookDetails + i)->price);
+			
+			found = 1;
+			break;
+		}
+	}
+
+	if (found == 0) {
+		printf("The book number could not be found!\n");
+	}
 }
