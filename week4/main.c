@@ -21,10 +21,8 @@ void saveFile(bookT* bookDetails, int size);
 
 void main() {
 	bookT* library;
-	int numOfBooks = 0;
-	int login;
-
-	
+	int numOfBooks;
+	int login;	
 
 	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
 
@@ -36,17 +34,40 @@ void main() {
 		(library + i)->price = 0;
 	}
 
+	//ask for the user status
 	printf("Would you like to login as either (1) Admin or (2)Guest?: \n");
 	scanf("%d", &login);
 
+	//login screen 
 	while (login != -1) {
-		if (login == 1)
-		{
-			printf("Please enter the password");
+		if (login == 1) {
+			passW = fopen("login.txt", "r");
+			char buff[100];
+			fgets(buff, 100, passW);
+			printf("String reads: %s\n", buff);
 
-			printf("Please enter the number of books you would like to have:\n");
-			scanf("%d", &numOfBooks);
-			adminMenu(library, numOfBooks);
+
+			if (passW == NULL) {
+				printf("Cannot open file");
+			}
+			else {
+				char pass[100] = "";
+				printf("Please enter the password:\n");
+				scanf("%s", pass);
+
+				if (!strcmp(buff, pass)) {
+					printf("You have entered the correct password!\n\n");
+
+					printf("Please enter the number of books you would like to have:\n");
+					scanf("%d", &numOfBooks);
+					adminMenu(library, numOfBooks);
+				}
+
+				
+
+			}
+			fclose(passW);
+
 		}
 		else if (login == 2) {
 			printf("You are logged in as a guest.\n");
@@ -59,6 +80,7 @@ void main() {
 	}			
 }
 
+//save the file
 void saveFile(bookT* bookDetails, int size) {
 	books = fopen("bookDB.txt", "a");
 
@@ -89,7 +111,7 @@ void adminMenu(bookT* bookDetails, int size) {
 
 	//menu loop 
 	while (menuOpt != -1) {
-		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book, 4 to Save current books or -1 to Exit: ");
+		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book, 4 to Save current books or -1 to Exit: \n");
 		scanf("%d", &menuOpt);
 
 		if (menuOpt == 1) {
