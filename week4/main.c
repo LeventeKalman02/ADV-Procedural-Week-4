@@ -9,20 +9,18 @@ typedef struct {
 	double price;
 }bookT;
 
-void mainMenu(bookT* bookDetails, int size);
+void adminMenu(bookT* bookDetails, int size);
 void addBook(bookT* bookDetails, int size);
 void searchBook(bookT* bookDetails, int size);
 void editBook(bookT* bookDetails, int size);
 
 void main() {
 	bookT* library;
-	int numOfBooks;
+	int numOfBooks = 0;
 	int init;
+	int login;
 
-	printf("Please enter the number of books you would like to have:\n");
-	scanf("%d", &numOfBooks);
-
-	library = (bookT*)malloc(numOfBooks * sizeof(bookT));	
+	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
 
 	//initialising the library
 	for (int i = 0; i < numOfBooks; i++) {
@@ -30,12 +28,30 @@ void main() {
 		strcpy((library + i)->title, "");
 		strcpy((library + i)->author, "");
 		(library + i)->price = 0;
-	}	
+	}
 
-	mainMenu(library, numOfBooks);
+	printf("Would you like to login as either (1) Admin or (2)Guest?: \n");
+	scanf("%d", &login);
+
+	while (login != -1) {
+		if (login == 1)
+		{
+			printf("Please enter the number of books you would like to have:\n");
+			scanf("%d", &numOfBooks);
+			adminMenu(library, numOfBooks);
+		}
+		else if (login == 2) {
+			printf("You are logged in as a guest.\n");
+		}
+		else {
+			printf("Invalid Entry!\n");
+			login = 0;
+		}
+		return;
+	}			
 }
 
-void mainMenu(bookT* bookDetails, int size) {
+void adminMenu(bookT* bookDetails, int size) {
 
 	int menuOpt = 0;
 
