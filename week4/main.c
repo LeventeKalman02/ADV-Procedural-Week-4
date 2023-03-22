@@ -9,16 +9,22 @@ typedef struct {
 	double price;
 }bookT;
 
+FILE* books;
+FILE* passW;
+
 void adminMenu(bookT* bookDetails, int size);
 void addBook(bookT* bookDetails, int size);
 void searchBook(bookT* bookDetails, int size);
 void editBook(bookT* bookDetails, int size);
+void readFile(bookT* bookDetails, int size);
+void saveFile(bookT* bookDetails, int size);
 
 void main() {
 	bookT* library;
 	int numOfBooks = 0;
-	int init;
 	int login;
+
+	
 
 	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
 
@@ -36,6 +42,8 @@ void main() {
 	while (login != -1) {
 		if (login == 1)
 		{
+			printf("Please enter the password");
+
 			printf("Please enter the number of books you would like to have:\n");
 			scanf("%d", &numOfBooks);
 			adminMenu(library, numOfBooks);
@@ -51,13 +59,37 @@ void main() {
 	}			
 }
 
+void saveFile(bookT* bookDetails, int size) {
+	books = fopen("bookDB.txt", "a");
+
+}
+
+void readFile(bookT* bookDetails, int size) {
+	books = fopen("bookDB.txt", "r");
+
+	if (books == NULL) {
+		printf("Cannot open file");
+	}
+	else {
+		while (!feof(books)) {
+			int numInputs = fscanf(books, "%ld %s %s %f", bookDetails->bookNum, &bookDetails->title, &bookDetails->author, &bookDetails->price);
+			if (numInputs == numInputs)
+			{
+				printf("\nBook Number: %ld\nTitle: %s\nAuthor: %s\nHourly Price: %.2f\n",
+					bookDetails->bookNum, bookDetails->title, bookDetails->author, bookDetails->price);
+			}
+		}
+		fclose(books);
+	}
+}
+
 void adminMenu(bookT* bookDetails, int size) {
 
 	int menuOpt = 0;
 
 	//menu loop 
 	while (menuOpt != -1) {
-		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
+		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book, 4 to Save current books or -1 to Exit: ");
 		scanf("%d", &menuOpt);
 
 		if (menuOpt == 1) {
@@ -68,6 +100,9 @@ void adminMenu(bookT* bookDetails, int size) {
 		}
 		else if (menuOpt == 3) {
 			editBook(bookDetails, size);
+		}
+		else if (menuOpt == 4) {
+			readFile(bookDetails, size);
 		}
 		else {
 			printf("The number you have entered is invalid, please enter a correct option!\n");
@@ -93,7 +128,7 @@ void addBook(bookT* bookDetails, int size) {
 			scanf("%s", (bookDetails + i)->author);
 
 			printf("Please enter the price:\n");
-			scanf("%lf", &(bookDetails + i)->price);
+			scanf("%f", &(bookDetails + i)->price);
 			addBook = 1;
 			break;
 		}
