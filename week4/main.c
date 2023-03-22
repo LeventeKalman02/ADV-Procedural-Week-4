@@ -21,7 +21,7 @@ void saveFile(bookT* bookDetails, int size);
 
 void main() {
 	bookT* library;
-	int numOfBooks;
+	int numOfBooks = 0;
 	int login;	
 
 	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
@@ -137,7 +137,7 @@ void adminMenu(bookT* bookDetails, int size) {
 }
 
 void addBook(bookT* bookDetails, int size) {
-	int addBook = 0;
+	int addBook;
 	for (int i = 0; i < size; i++) {
 		if ((bookDetails + i)->bookNum == 0) {
 			printf("Please enter the book number:\n");
