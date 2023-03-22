@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct {
 	long bookNum;
@@ -13,6 +14,7 @@ FILE* books;
 FILE* passW;
 
 void adminMenu(bookT* bookDetails, int size);
+void guestMenu(bookT* bookDetails, int size);
 void addBook(bookT* bookDetails, int size);
 void searchBook(bookT* bookDetails, int size);
 void editBook(bookT* bookDetails, int size);
@@ -21,53 +23,61 @@ void saveFile(bookT* bookDetails, int size);
 
 void main() {
 	bookT* library;
-	int numOfBooks = 0;
-	int login;	
-
-	library = (bookT*)malloc(numOfBooks * sizeof(bookT));
-
-	//initialising the library
-	for (int i = 0; i < numOfBooks; i++) {
-		(library + i)->bookNum = 0;
-		strcpy((library + i)->title, "");
-		strcpy((library + i)->author, "");
-		(library + i)->price = 0;
-	}
+	int numOfBooks;
+	int login;
 
 	//ask for the user status
 	printf("Would you like to login as either (1) Admin or (2)Guest?: \n");
 	scanf("%d", &login);
 
-	//login screen 
+	//login screen loop
 	while (login != -1) {
 		if (login == 1) {
 			passW = fopen("login.txt", "r");
 			char buff[100];
 			fgets(buff, 100, passW);
-			printf("String reads: %s\n", buff);
-
+			printf("String reads: %s\n", buff);//gets the password from login.txt and displays it
 
 			if (passW == NULL) {
 				printf("Cannot open file");
 			}
 			else {
 				char pass[100] = "";
-				printf("Please enter the password:\n");
-				scanf("%s", pass);
+				int passCheck = 4;
 
-				if (!strcmp(buff, pass)) {
-					printf("You have entered the correct password!\n\n");
+				for (int i = 0; i < passCheck; i++) {
+					printf("Please enter the password:\n");
+					scanf("%s", pass);
+					if (!strcmp(buff, pass)) {//checks if what you entered matches the string in the file
+						printf("You have entered the correct password!\n\n");
 
-					printf("Please enter the number of books you would like to have:\n");
-					scanf("%d", &numOfBooks);
-					adminMenu(library, numOfBooks);
+						printf("Please enter the number of books you would like to have:\n");
+						scanf("%d", &numOfBooks);
+
+						library = (bookT*)malloc(numOfBooks * sizeof(bookT));
+
+						//initialising the library
+						for (int i = 0; i < numOfBooks; i++) {
+							(library + i)->bookNum = 0;
+							strcpy((library + i)->title, "");
+							strcpy((library + i)->author, "");
+							(library + i)->price = 0;
+						}
+
+						adminMenu(library, numOfBooks);
+					}
+					else {
+						printf("The password you have entered is incorrect!\n");
+						
+					}
+
+					if (i == 2) {
+						printf("\nYou have tried too many times and have been locked out of your account!\n");
+						break;
+					}
 				}
-
-				
-
 			}
 			fclose(passW);
-
 		}
 		else if (login == 2) {
 			printf("You are logged in as a guest.\n");
@@ -77,12 +87,15 @@ void main() {
 			login = 0;
 		}
 		return;
-	}			
+	}
 }
 
 //save the file
 void saveFile(bookT* bookDetails, int size) {
 	books = fopen("bookDB.txt", "a");
+
+
+	fclose(books);
 
 }
 
@@ -105,6 +118,7 @@ void readFile(bookT* bookDetails, int size) {
 	}
 }
 
+//enters the menu for the admin
 void adminMenu(bookT* bookDetails, int size) {
 
 	int menuOpt = 0;
@@ -136,8 +150,37 @@ void adminMenu(bookT* bookDetails, int size) {
 	}
 }
 
+void guestMenu(bookT* bookDetails, int size) {
+
+	int menuOpt = 0;
+
+	//menu loop 
+	while (menuOpt != -1) {
+		printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to Save current books or -1 to Exit: \n");
+		scanf("%d", &menuOpt);
+
+		if (menuOpt == 1) {
+			searchBook(bookDetails, size);
+		}
+		else if (menuOpt == 2) {
+			addBook(bookDetails, size);
+		}
+		else if (menuOpt == 3) {
+			readFile(bookDetails, size);
+		}
+		else {
+			printf("The number you have entered is invalid, please enter a correct option!\n");
+			menuOpt = 0;
+		}
+
+		/*printf("\nPlease enter 1 to search a book, 2 to add a book, 3 to edit a book or -1 to Exit: ");
+		scanf("%d", &menuOpt);*/
+	}
+}
+
+//adds a book to the array
 void addBook(bookT* bookDetails, int size) {
-	int addBook;
+	int addBook = 0;
 	for (int i = 0; i < size; i++) {
 		if ((bookDetails + i)->bookNum == 0) {
 			printf("Please enter the book number:\n");
@@ -150,7 +193,7 @@ void addBook(bookT* bookDetails, int size) {
 			scanf("%s", (bookDetails + i)->author);
 
 			printf("Please enter the price:\n");
-			scanf("%f", &(bookDetails + i)->price);
+			scanf("%lf", &(bookDetails + i)->price);
 			addBook = 1;
 			break;
 		}
@@ -162,6 +205,7 @@ void addBook(bookT* bookDetails, int size) {
 	}
 }
 
+//searches for a book and displays the details based on the book number
 void searchBook(bookT* bookDetails, int size) {
 	long findBooknum;
 	int foundBook = 0;
@@ -180,12 +224,13 @@ void searchBook(bookT* bookDetails, int size) {
 			break;
 		}
 	}
-
+	//throws error if the book number could not be found
 	if (foundBook == 0) {
 		printf("The book number %ld could not be found!\n", findBooknum);
 	}
 }
 
+//allows user to edit a a book based on the book number
 void editBook(bookT* bookDetails, int size) {
 	long findBook;
 	int found = 0;
@@ -195,22 +240,22 @@ void editBook(bookT* bookDetails, int size) {
 
 	for (int i = 0; i < size; i++)
 	{
-		if ((bookDetails + i)-> bookNum == findBook) {
+		if ((bookDetails + i)->bookNum == findBook) {
 			printf("Please enter the new book number you want for the book\n");
-			scanf("%d", &(bookDetails + i)->bookNum);
+			scanf("%ld", &(bookDetails + i)->bookNum);
 			printf("Please enter the new title you want for the book\n");
 			scanf("%s", &(bookDetails + i)->title);
 			printf("Please enter the new author you want for the book\n");
 			scanf("%s", &(bookDetails + i)->author);
 			printf("Please enter the new price you want for the book\n");
-			scanf("%lf",&(bookDetails + i)->price);
-			
+			scanf("%lf", &(bookDetails + i)->price);
+
 			found = 1;
 			break;
 		}
 	}
-
+	//throws error if the book number could not be found
 	if (found == 0) {
-		printf("The book number could not be found!\n");
+		printf("The book number %ld could not be found!\n", findBook);
 	}
 }
