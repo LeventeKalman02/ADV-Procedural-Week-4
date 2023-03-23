@@ -41,6 +41,7 @@ void main() {
 			printf("Enter 1 to load a previous book DB or Enter 2 to create a new DB\n");
 			scanf("%d", &dbChoice);
 
+			//loads the database if choice entered == 1
 			if (dbChoice == 1) {
 				fp = fopen("bookDB.txt", "r");
 
@@ -56,15 +57,6 @@ void main() {
 						fscanf(fp, "%ld %s %s %f", &(library + i)->bookNum, &(library + i)->title, &(library + i)->author, &(library + i)->price);
 					}
 					fclose(fp);
-
-					for (int i = 0; i < numOfBooks; i++)
-					{
-						printf("------------------------------\n");
-						printf("Book num: %ld\n", (library + i)->bookNum);
-						printf("Book title: %s\n", (library + i)->title);
-						printf("Book author: %s\n", (library + i)->author);
-						printf("Book price: %.2f\n", (library + i)->price);
-					}
 
 					adminMenu(library, numOfBooks);
 				}
@@ -83,7 +75,8 @@ void main() {
 			}
 		}
 	}
-	else if ( login == 2) {
+	else if (login == 2) {
+		fp = fopen("bookDB.txt", "r");
 
 		if (fp == NULL) {
 			printf("Cannot open file");
@@ -93,8 +86,8 @@ void main() {
 
 			library = (bookT*)malloc(numOfBooks * sizeof(bookT));
 
-			for (int i = 0; i < numOfBooks; i++) {
-				fprintf(fp, "%ld %s %s %.2f\n", (library + i)->bookNum, (library + i)->title, (library + i)->author, (library + i)->price);
+			for (int i = 0; i < numOfBooks; i++) {						
+				fscanf(fp, "%ld %s %s %f", &(library + i)->bookNum, &(library + i)->title, &(library + i)->author, &(library + i)->price);
 			}
 			fclose(fp);
 
