@@ -32,7 +32,7 @@ void main() {
 		printf("Would you like to login as either (1) Admin or (2)Guest?: \n");
 		scanf("%d", &login);
 	}	
-
+	//loads the program as an Admin user
 	if (login == 1) {
 		bool valid = adminLogin();
 
@@ -61,6 +61,7 @@ void main() {
 					adminMenu(library, numOfBooks);
 				}
 			}
+			// creates a new book DB if choice entered == 2
 			else if (dbChoice == 2) {
 				printf("Please enter the number of books you would like to have:\n");
 				scanf("%d", &numOfBooks);
@@ -75,6 +76,7 @@ void main() {
 			}
 		}
 	}
+	//loads the program as a guest user
 	else if (login == 2) {
 		fp = fopen("bookDB.txt", "r");
 
@@ -200,6 +202,7 @@ void adminMenu(bookT* bookDetails, int size) {
 	}
 }
 
+//guest menu 
 void guestMenu(bookT* bookDetails, int size) {
 
 	int menuOpt = 0;
